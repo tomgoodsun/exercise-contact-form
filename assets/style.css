@@ -1,0 +1,20 @@
+.buttons {
+  text-align: center;
+}
+
+.input textarea[name="body"] {
+  height: 10em;
+}
+
+.confirm .confirm-value.body {
+  height: 10em;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+.confirm-value {
+  background: #EFEFEF;
+  color: #666;
+  padding: 3px 5px 3px 5px;
+}
+
