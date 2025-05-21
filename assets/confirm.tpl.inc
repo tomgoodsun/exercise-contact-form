@@ -1,6 +1,6 @@
 <div class="col-6">
   <h1>Contact Form - Confirm</h1>
-  <form class="confirm" method="post">
+  <form class="confirm" method="post" action="./">
     <div class="mb-3">
       <label for="name" class="form-label">名前</label>
       <div class="confirm-value name">aaaaaaaaaa</div>
@@ -18,7 +18,7 @@
       <div class="confirm-value email">aaaaaaaaaa</div>
       <input type="hidden" name="email" value="" />
     </div>
-    
+
     <div class="mb-3">
       <label for="category" class="form-label">お問い合わせ項目</label>
       <div class="confirm-value category">aaaaaaaaaa</div>
