@@ -1,5 +1,6 @@
 {
     "recommendations": [
-        "imgildev.vscode-php-language-pack"
+        "imgildev.vscode-php-language-pack",
+        "editorconfig.editorconfig"
     ]
 }
