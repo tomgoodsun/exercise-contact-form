@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * お問い合わせカテゴリの取得
+ *
+ * @return array
+ */
 function getCategories()
 {
     return [
@@ -8,7 +13,14 @@ function getCategories()
     ];
 }
 
-function processDone(array $request)
+/**
+ * 完了ページ
+ *
+ * @param string $cmd
+ * @param array $request
+ * @return array
+ */
+function processDone(string $cmd, array $request)
 {
     $rnd = $request['rnd'];
     if ($rnd == $_SESSION['rnd']) {
@@ -18,10 +30,20 @@ function processDone(array $request)
     unset($_SESSION['rnd']);
 
     return [
+        $cmd,
+        [
+        ]
     ];
 }
 
-function processConfirm(array $request)
+/**
+ * 確認ページ
+ *
+ * @param string $cmd
+ * @param array $request
+ * @return array
+ */
+function processConfirm(string $cmd, array $request)
 {
     $rnd = $request['rnd'];
 
@@ -29,16 +51,26 @@ function processConfirm(array $request)
     // 2. If error found, set error message and do processInput
 
     return [
-        'name' => $request['name'],
-        'furigana' => $request['furigana'],
-        'email' => $request['email'],
-        'category' => $request['category'],
-        'body' => $request['body'],
-        'rnd' => $rnd,
+        $cmd,
+        [
+            'name' => $request['name'],
+            'furigana' => $request['furigana'],
+            'email' => $request['email'],
+            'category' => $request['category'],
+            'body' => $request['body'],
+            'rnd' => $rnd,
+        ]
     ];
 }
 
-function processInput(array $request)
+/**
+ * 入力ページ
+ *
+ * @param string $cmd
+ * @param array $request
+ * @return array
+ */
+function processInput(string $cmd, array $request)
 {
     $request += [
         'name' => null,
@@ -53,25 +85,41 @@ function processInput(array $request)
     $_SESSION['rnd'] = $rnd;
 
     return [
-        'name' => $request['name'],
-        'furigana' => $request['furigana'],
-        'email' => $request['email'],
-        'category' => $request['category'],
-        'body' => $request['body'],
-        'rnd' => $rnd,
-        'categories' => getCategories(),
+        $cmd,
+        [
+            'name' => $request['name'],
+            'furigana' => $request['furigana'],
+            'email' => $request['email'],
+            'category' => $request['category'],
+            'body' => $request['body'],
+            'rnd' => $rnd,
+            'categories' => getCategories(),
+        ]
     ];
 }
 
+/**
+ * セッションの開始
+ *
+ * @return void
+ */
 function initSession()
 {
     session_start();
 }
 
+/**
+ * メインルーチン
+ *
+ * @param string $rootPath
+ * @param array $request
+ * @return void
+ */
 function main(string $rootPath, array $request)
 {
     try {
         initSession();
+
         $request += [
             'cmd' => 'input',
             'rnd' => null,
@@ -87,7 +135,7 @@ function main(string $rootPath, array $request)
         if (!array_key_exists($cmd, $commands)) {
             $cmd = 'input';
         }
-        $tplVars = $commands[$cmd]($request);
+        list($cmd, $tplVars) = $commands[$cmd]($cmd, $request);
     } catch (ErrorException $e) {
         $cmd = 'error';
         $tplVars = [
@@ -99,6 +147,8 @@ function main(string $rootPath, array $request)
             'errorCode' => $e->getCode(),
         ];
     }
+
     $tplVars['cmd'] = $cmd;
+
     require_once $rootPath . '/assets/base.tpl.inc';
 }
