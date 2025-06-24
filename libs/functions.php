@@ -22,8 +22,16 @@ function getCategories()
  */
 function processDone(string $cmd, array $request)
 {
-    $rnd = $request['rnd'];
-    if ($rnd == $_SESSION['rnd']) {
+    $rnd = $request['rnd'] ?? null;
+
+    // unsetするのであえて$_SESSIONに代入
+    $_SESSION['rnd'] = $_SESSION['rnd'] ?? null;
+    $sesRnd = $_SESSION['rnd'];
+
+    // nullチェック
+    $isAvailable = isset($rnd) && isset($sesRnd);
+
+    if ($isAvailable && $rnd == $_SESSION['rnd']) {
         // send mail here
     }
 
